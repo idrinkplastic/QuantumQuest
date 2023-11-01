@@ -7,15 +7,16 @@ void ofApp::setup(){
 
 
     //Gui
-        //SettingUpGuiElem
-        startButton.setup("Start Game", 562, 650);
-        soundToggle.setup("Sound On/Off", true, 500, 600);
-        volumeSlider.setup("Volume", 20, 200, 200, 100, 400);
+        startButton.setup("Start Game", 20, 75);  // Positioned at (20, 20)
+        soundToggle.setup("Sound On/Off", true, 20, 150); // Positioned at (20, 70)
+        volumeSlider.setup("Volume", 20, 120, 0, 200); // Positioned at (20, 120)
 
-        // Label init parameter for score
+
+
+            // Label Init Parameter for Score
         ofParameter<string> scoreParam;
         scoreParam.set("Score", "0");
-        scoreLabel.setup(scoreParam, 100, 100);
+        scoreLabel.setup(scoreParam, 20, 300);
 
         //Event Listeners for Gui
         startButton.addListener(this, &ofApp::startButtonPressed);
@@ -30,6 +31,9 @@ void ofApp::soundToggleChanged(bool &value) {
     // Handle the Sound On/Off toggle state change
     isSoundOn = value;
 }
+//--------------------------------------------------------------
+
+
 //--------------------------------------------------------------
 void ofApp::update(){
     scoreLabel.getParameter().cast<string>() = "Score: " + ofToString(playerScore);
