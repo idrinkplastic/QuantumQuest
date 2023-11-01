@@ -5,14 +5,19 @@
 
 class ofApp : public ofBaseApp{
 
-    //UI Elements
+    //gui
     ofxButton startButton;
     ofxToggle soundToggle;
     ofxSlider<int> volumeSlider;
     ofxLabel scoreLabel;
 
+    int playerScore;
 
+    void startButtonPressed();
+    void soundToggleChanged(bool &value);
 
+    bool gameStarted;
+    bool isSoundOn;
 
 public:
     void setup();
@@ -30,5 +35,6 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+
 
 };

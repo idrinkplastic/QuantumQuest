@@ -32,6 +32,7 @@ public:
         //Func to decrease char health
     void decreaseHealth(int amount);
 
+
 private:
     ofVec2f position; //char position
     float speed; //char speed
