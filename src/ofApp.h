@@ -1,15 +1,21 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxGui.h" //Includes GUI library
+#include "ofxGui.h" 
 
 class ofApp : public ofBaseApp{
 
     //gui
+
+
+    ofxPanel gui;
+
+    ofxIntSlider volumeSlider;
+    ofxToggle volumetoggle;
     ofxButton startButton;
-    ofxToggle soundToggle;
-    ofxSlider<int> volumeSlider;
     ofxLabel scoreLabel;
+
+    ofImage menuImage;
 
     int playerScore;
 
@@ -18,6 +24,12 @@ class ofApp : public ofBaseApp{
 
     bool gameStarted;
     bool isSoundOn;
+
+
+    //menu music
+    ofSoundPlayer menuMusic;
+    void volumeSliderChanged(int &value);
+    void volumeTogglePressed(bool &value);
 
 public:
     void setup();
@@ -35,6 +47,7 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+
 
 
 };

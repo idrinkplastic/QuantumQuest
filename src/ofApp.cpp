@@ -4,49 +4,61 @@
 void ofApp::setup(){
         gameStarted = false;
 
+    //TitleScreen
+        menuImage.load("titlescreen.png");
 
 
+    //Menu music
+        menuMusic.load("MenuMusic.mp3");
+        menuMusic.setVolume(0.5);
+        menuMusic.play();
+
+        volumeSlider.addListener(this, &ofApp::volumeSliderChanged);
+        volumetoggle.addListener(this, &ofApp::volumeTogglePressed);
     //Gui
-        startButton.setup("Start Game", 20, 75);  // Positioned at (20, 20)
-        soundToggle.setup("Sound On/Off", true, 20, 150); // Positioned at (20, 70)
-        volumeSlider.setup("Volume", 20, 120, 0, 200); // Positioned at (20, 120)
+        gui.setup();
+
+        gui.add(volumeSlider.setup("Volume Slider", 50, 0, 100));
+        gui.add(volumetoggle.setup("Volume Toggle", false));
+        gui.add(startButton.setup("Begin."));
+        gui.add(scoreLabel.setup("Player Score", "0"));
 
 
 
-            // Label Init Parameter for Score
-        ofParameter<string> scoreParam;
-        scoreParam.set("Score", "0");
-        scoreLabel.setup(scoreParam, 20, 300);
 
-        //Event Listeners for Gui
-        startButton.addListener(this, &ofApp::startButtonPressed);
-        soundToggle.addListener(this, &ofApp::soundToggleChanged);
 
-}
-void ofApp::startButtonPressed() {
-    // Handle the Start Game button click
-    gameStarted = true;
-}
-void ofApp::soundToggleChanged(bool &value) {
-    // Handle the Sound On/Off toggle state change
-    isSoundOn = value;
 }
 //--------------------------------------------------------------
-
-
+void ofApp::volumeSliderChanged(int &value) {
+    float volume = ofMap(value, 0, 100, 0.0, 1.0); // Map slider value to a volume range
+    menuMusic.setVolume(volume); // Set the volume of the menu music
+}
+//--------------------------------------------------------------
+void ofApp::volumeTogglePressed(bool &value) {
+    if (value) {
+        // Turn the sound on
+        menuMusic.setVolume(1.0);
+    } else {
+        // Mute the sound
+        menuMusic.setVolume(0.0);
+    }
+}
 //--------------------------------------------------------------
 void ofApp::update(){
-    scoreLabel.getParameter().cast<string>() = "Score: " + ofToString(playerScore);
+    scoreLabel.getParameter().cast<string>()= "Player Score: " + ofToString(playerScore);
 
 }
 //--------------------------------------------------------------
 
 void ofApp::draw(){
+
+    ofBackground(0);
+    int windowWidth = ofGetWidth();
+    int windowHeight = ofGetHeight();
+    menuImage.draw(0,0, windowWidth, windowHeight);
+
      //drawing gui
-        startButton.draw();
-        soundToggle.draw();
-        volumeSlider.draw();
-        scoreLabel.draw();
+    gui.draw();
 
 }
 //--------------------------------------------------------------
