@@ -13,6 +13,7 @@ class ofApp : public ofBaseApp{
     ofxIntSlider volumeSlider;
     ofxToggle volumetoggle;
     ofxButton startButton;
+    ofxButton endButton;
     ofxLabel scoreLabel;
 
     ofImage menuImage;
@@ -20,10 +21,8 @@ class ofApp : public ofBaseApp{
     int playerScore;
 
     void startButtonPressed();
-    void soundToggleChanged(bool &value);
 
     bool gameStarted;
-    bool isSoundOn;
 
 
     //menu music
@@ -31,7 +30,19 @@ class ofApp : public ofBaseApp{
     void volumeSliderChanged(int &value);
     void volumeTogglePressed(bool &value);
 
+
+
+
 public:
+      //game states
+    enum GameState {
+        MENU,
+        GAME,
+    } gameState;
+
+
+
+
     void setup();
     void update();
     void draw();
@@ -47,6 +58,10 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+
+
+
+
 
 
 
