@@ -12,6 +12,12 @@ Project{
         name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
+            "src/gamestate.cpp",
+            "src/gamestate.h",
+            "src/menustate.cpp",
+            "src/menustate.h",
+            "src/playercharacter.cpp",
+            "src/playercharacter.h",
             'src/main.cpp',
             'src/ofApp.cpp',
             'src/ofApp.h',

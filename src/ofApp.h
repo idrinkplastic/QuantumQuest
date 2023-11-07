@@ -3,32 +3,21 @@
 #include "ofMain.h"
 #include "ofxGui.h" 
 
+
+class menustate;
+
 class ofApp : public ofBaseApp{
+
+    friend class menustate;
 
     //gui
 
 
-    ofxPanel gui;
-
-    ofxIntSlider volumeSlider;
-    ofxToggle volumetoggle;
-    ofxButton startButton;
-    ofxButton endButton;
-    ofxLabel scoreLabel;
-
-    ofImage menuImage;
-
-    int playerScore;
-
-    void startButtonPressed();
 
     bool gameStarted;
 
 
-    //menu music
-    ofSoundPlayer menuMusic;
-    void volumeSliderChanged(int &value);
-    void volumeTogglePressed(bool &value);
+
 
 
 
