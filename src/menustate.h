@@ -4,13 +4,21 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 
-
-#pragma once
-
 class ofApp;
 
 class menuState {
+public:
+    menuState();
+    void setup(ofApp* app);
+    void update();
+    void draw();
 
+    int playerScore;
+
+
+    void volumeSliderChanged(int &value);
+    void volumeTogglePressed(bool &value);
+    bool gameStarted;
 private:
     ofImage menuImage;
     //menu music
@@ -25,23 +33,13 @@ private:
     ofxLabel scoreLabel;
 
 
+
     void startButtonPressed();
     void endButtonPressed();
 
     ofApp* app;
 
-public:
-    menuState(ofApp* app);
-    int playerScore;
 
-    void setup(ofApp* app);
-    void update(ofApp* app);
-    void draw(ofApp* app);
-
-    void volumeSliderChanged(int &value);
-    void volumeTogglePressed(bool &value);
-
-    bool gameStarted;
 };
 
 #endif // MENUSTATE_H

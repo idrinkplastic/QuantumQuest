@@ -1,36 +1,17 @@
 #pragma once
 
+#include "menustate.h"
+#include "gamestate.h"
 #include "ofMain.h"
-#include "ofxGui.h" 
+#include "ofxGui.h"
 
-
-class menustate;
-
-class ofApp : public ofBaseApp{
-
-    friend class menustate;
-
-    //gui
-
-
-
-    bool gameStarted;
-
-
-
-
-
-
-
+class ofApp : public ofBaseApp {
 public:
-      //game states
+    // game states
     enum GameState {
         MENU,
         GAME,
     } gameState;
-
-
-
 
     void setup();
     void update();
@@ -38,7 +19,7 @@ public:
 
     void keyPressed(int key);
     void keyReleased(int key);
-    void mouseMoved(int x, int y );
+    void mouseMoved(int x, int y);
     void mouseDragged(int x, int y, int button);
     void mousePressed(int x, int y, int button);
     void mouseReleased(int x, int y, int button);
@@ -48,10 +29,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
-
-
-
-
-
-
+private:
+    menuState menu;
+    class gameState game;
 };

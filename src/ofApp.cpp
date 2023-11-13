@@ -1,19 +1,35 @@
 #include "ofApp.h"
-
+#include "menustate.h"
+#include "gamestate.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+    menu.setup(this);
+    gameState = MENU;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    switch (gameState){
+    case MENU:
+        menu.update();
+                break;
+    case GAME:
+        game.update();
+                break;
+    }
 }
 //--------------------------------------------------------------
 
 void ofApp::draw(){
-
+    switch(gameState){
+    case MENU:
+        menu.draw();
+        break;
+    case GAME:
+        game.draw();
+        break;
+    }
 }
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
@@ -87,4 +103,4 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 //Scrolling background for a level (not prio)
 //Start creating obstacles
 //Start creating player
-//Create classes for each game state
+
