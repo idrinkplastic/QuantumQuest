@@ -40,11 +40,6 @@ void PlayerCharacter::update() {
     x += horizontalVelocity;
 
     //restraining character within screen
-    if (x < 0){
-        x = 0; //left
-    } else if (x + width > ofGetWidth()){
-        x = ofGetWidth() - width; // right
-    }
 
     if (y < 0){
         y = 0; //top
@@ -73,7 +68,7 @@ void PlayerCharacter::update() {
 void PlayerCharacter::draw() {
     // Draw the player character as a simple square
     ofSetColor(255, 0, 0); // Set color to red
-    ofDrawRectangle(x, y, width, height); // Draw a red square representing the player character
+    ofDrawRectangle(x, y, width, height); // Draw a red square representing the player character TEMPLATE
 }
 
 void PlayerCharacter::jump(){

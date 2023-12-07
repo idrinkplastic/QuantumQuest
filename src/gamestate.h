@@ -10,8 +10,8 @@ class menuState;
 
 class Platform{
 public:
-    float x, y; //position
-    float width, height; //size
+    float x, y;
+    float width, height;
 
     //construct to init
     Platform(float x, float y, float width, float height);
@@ -20,6 +20,18 @@ public:
 
 
 class gameState {
+    ofImage backgroundImage;
+    ofImage tutorialScreen;
+
+    ofxPanel optionsPanel;
+    ofxSlider<float> soundVolumeSlider;
+    ofxSlider<int> screenWidthSlider;
+    ofxSlider<int> screenHeightSlider;
+    ofxButton exitButton;
+
+
+
+
 public:
     gameState();
     void setup(ofApp* app);
@@ -30,9 +42,10 @@ public:
     PlayerCharacter player;
     void drawGame();
     void drawBackground();
+    void exitButtonPressed();
 
 private:
-    ofImage backgroundImage;
+
     ofSoundPlayer gameMusic;
     void endButtonPressed();
 
@@ -42,7 +55,7 @@ private:
     ofApp* app;
 
 
-    void generateInitialPlatforms(); //generate initial platforms
+    void generateInitialPlatforms();
     void drawPlatforms();
     void populatePlatforms();
 
@@ -60,6 +73,7 @@ private:
     float cameraX;
     float cameraY;
 
+    bool showOptionsPanel;
 
 };
 

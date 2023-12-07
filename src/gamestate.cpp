@@ -1,7 +1,7 @@
 #include "gamestate.h"
 #include "ofApp.h"
 #include <vector>
-
+#include "ofxGui.h"
 
 //CORE
 gameState::gameState() {
@@ -11,13 +11,17 @@ gameState::gameState() {
 
     platforms = std::vector<Platform>();
 
+    showOptionsPanel = false;
+
 }
 
 void gameState::setup(ofApp* app) {
     cout << "Game state setup called" << endl;
     this->app = app;
-    generateInitialPlatforms(); // Generate initial platforms when the game state is set up
+    generateInitialPlatforms();
     populatePlatforms();
+    tutorialScreen.load("tutorialscreen.png");
+
 
     float middleX = ofGetWidth() * 0.5;
 
@@ -29,24 +33,63 @@ void gameState::setup(ofApp* app) {
     leftBoundary = ofGetWidth() * 0.3;
     rightBoundary = ofGetWidth() * 0.7;
 
+    //options
+
+    optionsPanel.setup("Options");
+    optionsPanel.setPosition(960, 590);
+
+    soundVolumeSlider.setup("Sound Volume", 0.0, 0.0, 1.0);
+    optionsPanel.add(&soundVolumeSlider);
+    gameMusic.setVolume(soundVolumeSlider);
+
+    screenWidthSlider.setup("Screen Width", ofGetWidth(), 800, 1920);
+    optionsPanel.add(&screenWidthSlider);
+
+    screenHeightSlider.setup("Screen Height", ofGetHeight(), 600, 1080);
+    optionsPanel.add(&screenHeightSlider);
+
+    exitButton.setup("Exit");
+    exitButton.addListener(this, &gameState::exitButtonPressed);
+    optionsPanel.add(&exitButton);
+
 }
 
-void gameState::update(){
+void gameState::update() {
     player.update();
 
-    // Check player's position to generate platforms
-        if (getPlayerX() > rightBoundary) {
-            createPlatformToRight();
-            rightBoundary += 300; // Adjust the distance for next platform generation
-        } else if (getPlayerX() < leftBoundary) {
-            createPlatformToLeft();
-            leftBoundary -= 300; // Adjust the distance for next platform generation
+    cameraX = player.getX() - ofGetWidth() / 2;
+    cameraY = player.getY() - ofGetHeight() / 2;
+
+    // Adjust the boundaries to allow the character to move freely
+    if (getPlayerX() > rightBoundary - ofGetWidth() * 0.3) {
+        float newPlatformX = rightBoundary + 200; // Place the new platform 200 units to the right
+        float newPlatformY = ofRandom(50, ofGetHeight() - 100); // Random Y position between 50 and height-100
+        float newPlatformWidth = 150; // constant width
+        float newPlatformHeight = 20; // constant height
+
+        platforms.push_back(Platform(newPlatformX, newPlatformY, newPlatformWidth, newPlatformHeight));
+
+        rightBoundary = newPlatformX + newPlatformWidth; // Update the right boundary
+    } else if (getPlayerX() < leftBoundary) {
+        float newPlatformX = leftBoundary - 200;
+        float newPlatformY = ofRandom(50, ofGetHeight() - 100);
+        float newPlatformWidth = 150;
+        float newPlatformHeight = 20;
+
+        platforms.push_back(Platform(newPlatformX, newPlatformY, newPlatformWidth, newPlatformHeight));
+
+        leftBoundary = newPlatformX; // Update the left boundary
+    }
+
+    if (ofGetKeyPressed(OF_KEY_F1)) {
+            showOptionsPanel = !showOptionsPanel;
         }
 
-        cameraX = player.getX() - ofGetWidth() / 2;
-        cameraY = player.getY() - ofGetHeight() / 2;
+    gameMusic.setVolume(soundVolumeSlider);
 
-
+    if (screenWidthSlider != ofGetWidth() || screenHeightSlider != ofGetHeight()) {
+            ofSetWindowShape(screenWidthSlider, screenHeightSlider);
+        }
 
 }
 
@@ -57,15 +100,17 @@ void gameState::draw() {
     cout << "Drawing Background" << endl;
 
     int numBackgrounds = ceil((float) ofGetWidth() / backgroundImage.getWidth()) + 1;
-
-    // Draw multiple background images for continuous scrolling
     ofSetColor(255); // Set color back to default (white)
     for (int i = 0; i < numBackgrounds; ++i) {
         float xPos = i * backgroundImage.getWidth();
         backgroundImage.draw(xPos, 0, backgroundImage.getWidth(), ofGetHeight());
     }
 
-    cout << "Drawing Platforms" << endl;
+    // Draw tutorial screen image to the left of the background
+        float tutorialWidth = tutorialScreen.getWidth();
+        tutorialScreen.draw(-tutorialWidth, 0, tutorialWidth, ofGetHeight());
+
+        cout << "Drawing Platforms" << endl;
     ofSetColor(0);
 
     if (platforms.empty()) {
@@ -78,6 +123,25 @@ void gameState::draw() {
             ofDrawRectangle(platform.x, platform.y, platform.width, platform.height);
         }
     }
+
+    if (showOptionsPanel) {
+        ofPushMatrix();
+        ofTranslate(cameraX, cameraY);
+
+            float panelX = player.getX() - ofGetWidth() * 0.25; // Adjust X position relative to the player
+            float panelY = player.getY() - ofGetHeight() * 0.25; // Adjust Y position relative to the player
+
+            // Ensure the panel remains within the screen boundaries
+            panelX = ofClamp(panelX, 0, ofGetWidth() - optionsPanel.getWidth());
+            panelY = ofClamp(panelY, 0, ofGetHeight() - optionsPanel.getHeight());
+
+            optionsPanel.setPosition(panelX, panelY);
+            optionsPanel.draw();
+
+            ofPopMatrix();
+
+        }
+
 
     player.draw();
 
@@ -120,8 +184,8 @@ void gameState::createPlatformToRight() {
     // Generate new platforms to the right based on player's position
     float newPlatformX = rightBoundary + 200; // Place the new platform 200 units to the right
     float newPlatformY = ofRandom(50, ofGetHeight() - 100); // Random Y position between 50 and height-100
-    float newPlatformWidth = 150; // Set a constant width for the platform
-    float newPlatformHeight = 20; // Set a constant height for the platform
+    float newPlatformWidth = 150;
+    float newPlatformHeight = 20;
 
     platforms.push_back(Platform(newPlatformX, newPlatformY, newPlatformWidth, newPlatformHeight));
 }
@@ -130,16 +194,24 @@ void gameState::createPlatformToLeft() {
     // Generate new platforms to the left based on player's position
     float newPlatformX = leftBoundary - 200; // Place the new platform 200 units to the left
     float newPlatformY = ofRandom(50, ofGetHeight() - 100); // Random Y position between 50 and height-100
-    float newPlatformWidth = 150; // Set a constant width for the platform
-    float newPlatformHeight = 20; // Set a constant height for the platform
+    float newPlatformWidth = 150; //constants
+    float newPlatformHeight = 20;
 
     platforms.push_back(Platform(newPlatformX, newPlatformY, newPlatformWidth, newPlatformHeight));
 }
 
+void gameState::exitButtonPressed(){
+    ofExit();
+}
 
 
+//Options menu rework
+//
 
-
+//Create a main game state menu when in
+//create the tutorial room when player transitions left
+//create a level picker && randomised calculations within
+//
 
 
 
