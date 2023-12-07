@@ -6,12 +6,21 @@
 #include "ofxGui.h"
 
 class ofApp : public ofBaseApp {
+
+    bool wPressed;
+    bool aPressed;
+    bool dPressed;
+
+
+
 public:
     // game states
     enum GameState {
         MENU,
         GAME,
     } gameState;
+
+    ofApp() : wPressed(false), aPressed(false), dPressed(false) {}
 
     void setup();
     void update();
@@ -28,6 +37,9 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+
+
+
 
 private:
     menuState menu;

@@ -1,43 +1,52 @@
 #ifndef PLAYERCHARACTER_H
 #define PLAYERCHARACTER_H
 #pragma once
-
 #include "ofMain.h"
 
-class PlayerCharacter {
 
+
+class gameState;
+
+enum Direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    UP_RIGHT,
+    UP_LEFT
+};
+
+class PlayerCharacter {
 public:
-        //Construct
-    PlayerCharacter();
-        //Destruct
-    ~PlayerCharacter();
-        //Func to setup character (char)
-    void setup();
-        //Func to update logic of char
-    void update();
-        //Func to draw char
-    void draw();
-        //Func to set location of char
-    void setPosition(const ofVec2f& position );
-        //Func to get location of char
-    ofVec2f getPosition() const;
-        //Func to set char speed
-    void setSpeed(float speed);
-        //Func to get char speed
-    float getSpeed() const;
-        //Func to set char health
-    void setHealth(int health);
-        //Func to get char health
-    int getHealth() const;
-        //Func to decrease char health
-    void decreaseHealth(int amount);
+    PlayerCharacter(); // Constructor
+    void setup(float x, float y, gameState& state); // Setup function to initialize the player's position
+    void update(); // Update function for character behavior
+    void draw(); // Draw function to render the character
+    void jump();
+    void move (Direction dir);
+
+    float getX() const { return x; }
+    float getY() const { return y; }
+
+
+    //movement
+
 
 
 private:
-    ofVec2f position; //char position
-    float speed; //char speed
-    int health; //char health ; set to 100 to begin
+    float x, y; // Position of the player character
+    float width, height; // Width and height of the player character
+    float gravity;
+    float jumpForce;
+    bool isJumping;
+    float verticalVelocity;
+    float horizontalVelocity;
+    float friction;
+
+    gameState* gameStateRef; //ref to gamestate
+
 
 };
+
 
 #endif // PLAYERCHARACTER_H

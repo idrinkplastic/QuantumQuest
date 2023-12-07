@@ -9,11 +9,15 @@ void ofApp::setup(){
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
-    switch (gameState){
-    case MENU:
-        menu.update();
-                break;
+void ofApp::update() {
+    switch (gameState) {
+        case MENU:
+            menu.update();
+            if (menu.gameStarted) {
+                gameState = GAME; // Transition to the GAME state
+                game.setup(this); // Initialize the game state
+            }
+            break;
     case GAME:
         game.update();
                 break;
@@ -31,13 +35,65 @@ void ofApp::draw(){
         break;
     }
 }
+
+
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+    if (gameState == GAME){
+        switch (key) {
+            case 'w':
+                wPressed = true;
 
+                if (aPressed) {
+                    game.player.move(UP_LEFT);
+                    wPressed = false;
+                } else if (dPressed) {
+                    game.player.move(UP_RIGHT);
+                    wPressed = false;
+                } else {
+                    game.player.move(UP);
+                }
+                break;
+            case 'a':
+                aPressed = true;
+
+                if (wPressed) {
+                    game.player.move(UP_LEFT);
+                    aPressed = false;
+                } else {
+                    game.player.move(LEFT);
+                }
+                break;
+            case 'd':
+                dPressed = true;
+
+                if (wPressed) {
+                    game.player.move(UP_RIGHT);
+                    dPressed = false;
+                } else {
+                    game.player.move(RIGHT);
+                }
+                break;
+        }
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
+
+    if (gameState == GAME){
+        switch (key){
+        case 'w':
+            wPressed = false;
+            break;
+        case 'a':
+            aPressed = false;
+            break;
+        case 'd':
+            dPressed = false;
+            break;
+        }
+    }
 
 }
 

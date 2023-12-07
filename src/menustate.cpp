@@ -12,19 +12,21 @@ void menuState::setup(ofApp* app){
     //TitleScreen
     app->gameState = ofApp::MENU;
     this->menuImage.load("titlescreen.png"); //menu image
- cout << "Setting up menu state1" << endl;
+
     //Menu Music
- if (menuMusic.load("MenuMusic.mp3")) {
-     cout << "Menu music loaded successfully!" << endl;
- } else {
-     cout << "Error loading menu music!" << endl;
- }
+    if (menuMusic.load("MenuMusic.mp3")){
     menuMusic.setVolume(0.5);
     menuMusic.play();
+    menuMusic.setLoop(true);
+    }else{
+        cout << "Error loading music file!" << endl;
+
+    }
+
 
     volumeSlider.addListener(this, &menuState::volumeSliderChanged);
     volumetoggle.addListener(this, &menuState::volumeTogglePressed);
- cout << "Setting up menu state2" << endl;
+
     // GUI MENU
     gui.setup();
 
@@ -35,7 +37,7 @@ void menuState::setup(ofApp* app){
     gui.add(startButton.setup("Begin."));
 
     gui.add(scoreLabel.setup("Player Score", "0"));
- cout << "Setting up menu state3" << endl;
+
 
     startButton.addListener(this, &menuState::startButtonPressed);
 
@@ -45,12 +47,8 @@ void menuState::setup(ofApp* app){
 
 
 void menuState::update(){
-    cout << "Menu State Update" << endl;
-    //begin button
-    if (gameStarted){
-        app->gameState = ofApp::GAME;
-    }
-    gameStarted = false;
+
+
 }
 
 
@@ -81,6 +79,6 @@ void menuState::volumeSliderChanged(int &value) {
 
 void menuState::startButtonPressed(){
     gameStarted = true;
-    app->gameState = ofApp::GAME;  // Set the game state in ofApp
-    cout << "Game started. Switching to GAME state." << endl;
+
+
 }
